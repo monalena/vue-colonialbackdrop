@@ -12,7 +12,7 @@
 /* eslint-disable */
     import * as d3 from 'd3';
     import Vis from './Visualisation.vue';
-    import Control from './ControlPanel.vue'
+    import Control from './ControlPanel.vue';
 
   export default {
     name: "BackdropViz",
@@ -27,7 +27,7 @@
         cummulative: false,
         selection: 0,
         checkedBoxes: [true, true],
-        colorset: ["287271", "C64C2E"],
+        colorset: ["#287271", "#C64C2E"],
         // Global variables to make selections and populate the legend
         gender: ["Male", "Female"],
         cumGender: ["cumMale", "cumFemale"],
@@ -43,10 +43,10 @@
         // Global color
         // nice color picker under https://coolors.co/f94144-f3722c-f8961e-f9c74f-90be6d-43aa8b-577590
         //var colorSet10 = ["264653","287271","2a9d8f","8ab17d","e9c46a","efb366","f4a261","e76f51","c64c2e","a4290b"]
-        genderColors: ["287271", "C64C2E"],
-        arrivalColors: ["264653", "2a9d8f", "8cca9c", "e9c46a", "e76f51", "a4290b"],
-        departureColors: ["8AB17D", "EFB366", "E76F51"],
-        protesterColors: ["264653", "e9c46a"]
+        genderColors: ["#287271", "#C64C2E"],
+        arrivalColors: ["#264653", "#2a9d8f", "#8cca9c", "#e9c46a", "#e76f51", "#a4290b"],
+        departureColors: ["#8AB17D", "#EFB366", "#E76F51"],
+        protesterColors: ["#264653", "#e9c46a"]
 
       }
     },
@@ -454,7 +454,7 @@
       };
 
       // LOAD function to get data and add cummulative counts
-      d3.csv("/data/wideData.csv").then(dataLoaded);
+      d3.csv(process.env.BASE_URL+"data/wideData.csv").then(dataLoaded);
     }
   };
 </script>
