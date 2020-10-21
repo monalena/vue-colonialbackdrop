@@ -1,9 +1,8 @@
 <template>
     <!-- eslint-disable -->
     <div class="grid-x grid-padding-x">
-        <Control @loadGender="loadGender" @loadArrivals="loadArrivals" @loadOrigins="loadOrigins"
-                 @loadProtesters="loadProtesters" @loadAbsolute="loadAbsolute" @loadCummulative="loadCummulative"
-                 @tickedBoxesTrigger="tickedBoxesTrigger"></Control>
+        <Control @updateData="updateData" :genderData="genderData" :arrivalData="arrivalData"
+        :departureData="departureData" :protestData="protestData"></Control>
         <Vis></Vis>
     </div>
 </template>
@@ -24,200 +23,68 @@
       return {
         // Global variables to make data accessible from different functions
         convictData: [],
-        cummulative: false,
-        selection: 0,
-        checkedBoxes: [true, true],
-        colorset: ["#287271", "#C64C2E"],
-        // Global variables to make selections and populate the legend
-        gender: ["Male", "Female"],
-        cumGender: ["cumMale", "cumFemale"],
-        arrivals: ["NSW", "VDL", "NOR", "PP", "MOR", "WA"],
-        arrivalNames: ["Sydney", "Hobart", "Norfolk Island", "Port Phillip", "Moreton Bay", "Swan River"],
-        cumArrivals: ["cumNSW", "cumVDL", "cumNOR", "cumPP", "cumMOR", "cumWA"],
-        origins: ["England", "Ireland", "Overseas"],
-        originNames: ["England", "Ireland", "Overseas Territory"],
-        cumOrigins: ["cumEng", "cumIre", "cumOve"],
-        protesters: ["Protesters", "Nonprotesters"],
-        protesterNames: ["Protesters", "Non Protesters"],
-        cumProtesters: ["cumProt", "cumNon"],
-        // Global color
-        // nice color picker under https://coolors.co/f94144-f3722c-f8961e-f9c74f-90be6d-43aa8b-577590
-        //var colorSet10 = ["264653","287271","2a9d8f","8ab17d","e9c46a","efb366","f4a261","e76f51","c64c2e","a4290b"]
-        genderColors: ["#287271", "#C64C2E"],
-        arrivalColors: ["#264653", "#2a9d8f", "#8cca9c", "#e9c46a", "#e76f51", "#a4290b"],
-        departureColors: ["#8AB17D", "#EFB366", "#E76F51"],
-        protesterColors: ["#264653", "#e9c46a"]
-
+        genderData:{
+          Male:{label:"Male",color:"#287271",cum:"cumMale"},
+          Female:{label:"Female",color:"#C64C2E",cum:"cumFemale"}
+        },
+        arrivalData:{
+          NSW:{label:"Sydney",color:"#264653",cum:"cumNSW"},
+          VDL:{label:"Hobart",color:"#2a9d8f",cum:"cumVDL"},
+          NOR:{label:"Norfolk Island",color:"#8cca9c",cum:"cumNOR"},
+          PP:{label:"Port Phillip",color:"#e9c46a",cum:"cumPP"},
+          MOR:{label:"Moreton Bay",color:"#e76f51",cum:"cumMOR"},
+          WA:{label:"Swan River",color:"#a4290b",cum:"cumWA"}
+        },
+        departureData:{
+          England:{label:"England",color:"#8AB17D",cum:"cumEng"},
+          Ireland:{label:"Ireland",color:"#EFB366",cum:"cumIre"},
+          Overseas:{label:"Overseas Territory",color:"#E76F51",cum:"cumOve"}
+        },
+        protestData:{
+          Protesters:{label:"Protesters",color:"#264653",cum:"cumProt"},
+          Nonprotesters:{label:"Non Protesters",color:"#e9c46a",cum:"cumNon"}
+        }
       }
     },
     methods: {
-      // HELPER function to set all buttons in selection to plain background
-      setButtonsPlain: function () {
-        let buttons = document.querySelectorAll("#selection a");
-        for (let i = 0; i < buttons.length; i++) {
-          buttons[i].setAttribute("class", "button secondary");
-        }
-      },
-
-      // HELPER function for clearing selection buttons
-      clearUp: function () {
-        let allSets = document.querySelectorAll("fieldset");
-        for (let i = 0; i < allSets.length; i++) {
-          allSets[i].setAttribute("class", "detail hide");
-        }
-      },
-
-      // HELPER function create boolean checkbox array in the right length on initial graph load
-      setCheckboxArrayLength: function (dataArray) {
-        this.checkedBoxes = [];
-        for (let i = 0; i < dataArray.length; i++) {
-          this.checkedBoxes.push(true);
-        }
-      },
-
-      // HELPER function to detect visible checkboxes and form their ticks into an array
-      tickedBoxesTrigger: function () {
-        let visible = document.querySelector(".detail:not(.hide)");
-        let visibleBoxes = visible.querySelectorAll('input');
-        //console.log(visibleBoxes);
-        this.checkedBoxes = [];
-        for (let i = 0; i < visibleBoxes.length; i++) {
-          this.checkedBoxes.push(visibleBoxes[i].checked);
-        }
-        this.chooseParameters(this.convictData);
-      },
-
-      // HELPER function to set all checkboxes to back to checked when button is clicked
-      checkBoxes: function () {
-        let visible = document.querySelector(".detail:not(.hide)");
-        let visibleBoxes = visible.querySelectorAll('input');
-        for (let i = 0; i < visibleBoxes.length; i++) {
-          visibleBoxes[i].checked = true;
-        }
-      },
-
-      // BUTTON functions connected to buttons triggering new bar charts
-      loadAbsolute: function () {
-        this.cummulative = false;
-        this.chooseParameters(this.convictData);
-        document.querySelector("#absolute").setAttribute("class", "button secondary active");
-        document.querySelector("#cummulative").setAttribute("class", "button secondary");
-      },
-
-      loadCummulative: function () {
-        this.cummulative = true;
-        this.chooseParameters(this.convictData);
-        document.querySelector("#cummulative").setAttribute("class", "button secondary active");
-        document.querySelector("#absolute").setAttribute("class", "button secondary");
-      },
-
-      loadGender: function () {
-        this.selection = 0; // 0 for gender, 1 for arrival, 2 for departure, 3 for protester selection
-        this.colorset = this.genderColors; // pick the right color set for this selection
-        this.setButtonsPlain(); //set the background color of all button group to plain, then make this one active
-        document.querySelector("#gender").setAttribute("class", "button secondary active");
-        this.clearUp(); // hide all optional checkboxes, then show this one
-        document.querySelector('#genderFields').setAttribute("class", "detail");
-        this.checkBoxes(); //set all checkboxes to ticked when button is pressed (otherwise ticked of boxes stay off)
-        this.setCheckboxArrayLength(this.colorset); // set the right number of true Boolean values in the checkbox array
-        this.chooseParameters(this.convictData); // choose the correct data columns
-      },
-
-      loadArrivals: function () {
-        this.selection = 1;
-        //Vue.set(app.data, 'colorset', this.arrivalColors);
-        this.colorset = this.arrivalColors;
-        this.setButtonsPlain();
-        document.querySelector("#arrival").setAttribute("class", "button secondary active");
-        this.clearUp();
-        document.querySelector('#arrivalFields').setAttribute("class", "detail");
-        this.checkBoxes();
-        this.setCheckboxArrayLength(this.colorset);
-        this.chooseParameters(this.convictData);
-      },
-
-      loadOrigins: function () {
-        this.selection = 2;
-        this.colorset = this.departureColors;
-        this.setButtonsPlain();
-        document.querySelector("#origin").setAttribute("class", "button secondary active");
-        this.clearUp();
-        document.querySelector('#departureFields').setAttribute("class", "detail");
-        this.checkBoxes();
-        this.setCheckboxArrayLength(this.colorset);
-        this.chooseParameters(this.convictData);
-      },
-
-      loadProtesters: function () {
-        this.selection = 3;
-        this.colorset = this.protesterColors;
-        this.setButtonsPlain();
-        document.querySelector("#protester").setAttribute("class", "button secondary active");
-        this.clearUp();
-        this.setCheckboxArrayLength(this.colorset);
-        this.chooseParameters(this.convictData);
-      },
-
-      // MAIN function to stack the dataset based on the right parameters
-      chooseParameters: function (data) {
-        let colvars = [];
-        let legendVars = [];
-        let colors = this.colorset;
-
-        if (this.cummulative === false) {
-          switch (this.selection) {
-            case 0:
-              colvars = this.gender;
-              legendVars = this.gender;
+      updateData: function (selected, selectedData, representation) {
+        let dataSet
+          switch (selected) {
+            case "Gender":
+              dataSet = this.genderData;
               break;
-            case 1:
-              colvars = this.arrivals;
-              legendVars = this.arrivalNames;
+            case "Arrival Ports":
+              dataSet = this.arrivalData;
               break;
-            case 2:
-              colvars = this.origins;
-              legendVars = this.originNames;
+            case "Departure Ports":
+              dataSet = this.departureData;
               break;
-            case 3:
-              colvars = this.protesters;
-              legendVars = this.protesterNames;
-          }
-        } else {
-          switch (this.selection) {
-            case 0:
-              colvars = this.cumGender;
-              legendVars = this.gender;
+            case "Political Convicts":
+              dataSet = this.protestData;
               break;
-            case 1:
-              colvars = this.cumArrivals;
-              legendVars = this.arrivalNames;
-              break;
-            case 2:
-              colvars = this.cumOrigins;
-              legendVars = this.originNames;
-              break;
-            case 3:
-              colvars = this.cumProtesters;
-              legendVars = this.protesterNames;
           }
 
+        let selectedColvars = []
+        let selectedLegendVars = []
+        let selectedColors = []
+        for (var i in selectedData) {
+          if(representation=="Absolute"){
+            selectedColvars.push(selectedData[i])
+          }else{
+            selectedColvars.push(dataSet[selectedData[i]].cum)
+          }
+          selectedLegendVars.push(dataSet[selectedData[i]].label)
+          selectedColors.push(dataSet[selectedData[i]].color)
         }
-
-        const indices = this.checkedBoxes.reduce(
-          (out, bool, index) => bool ? out.concat(index) : out, []
-        );
-
-        let selectedColvars = indices.map(i => colvars[i]);
-        let selectedLegendVars = indices.map(i => legendVars[i]);
-        let selectedColors = indices.map(i => colors[i]);
 
         // Transpose the data into layers
         let dataset = d3.stack()
-          .keys(selectedColvars)(data)
+          .keys(selectedColvars)(this.convictData)
           .map(d => (d.forEach(v => v.key = d.key), d));
-
         this.createBarchart(dataset, selectedLegendVars, selectedColors);
       },
+
+
 
       // DRAW function to create the bar chart
       createBarchart: function (data, legendvars, selectedColors) {
@@ -449,7 +316,7 @@
         this.convictData = data;
 
 
-        this.chooseParameters(this.convictData);
+        this.updateData("Gender",["Male","Female"],"Absolute")
 
       };
 

@@ -2,73 +2,138 @@
     <div class="cell medium-3">
         <h6>Selection</h6>
         <div class="button-group stacked hollow" id="selection">
-            <a class="button secondary active" id="gender" @click="$emit('loadGender')">Gender</a>
-            <a class="button secondary" id="arrival" @click="$emit('loadArrivals')">Arrival Ports</a>
-            <a class="button secondary" id="origin" @click="$emit('loadOrigins')">Departure Ports</a>
-            <a class="button secondary" id="protester" @click="$emit('loadProtesters')">Political Convicts</a>
+            <a v-for="item in selectionBtns" :key=item.label :class="'button secondary '+isSelected(item)"
+               @click="makeSelection(item)">{{item.label}}</a>
         </div>
         <h6>Representation</h6>
         <div class="button-group hollow" >
-            <a class="button secondary active" id="absolute" @click="$emit('loadAbsolute')">Absolute</a>
-            <a class="button secondary" id="cummulative" @click="$emit('loadCummulative')">Cummulative</a>
+            <a v-for="item in representationBtns" :key=item.label :class="'button secondary '+isRepresented(item)"
+               @click="chooseRepresentation(item)">{{item.label}}</a>
         </div>
         <div>
-            <fieldset class="detail" id="genderFields">
+            <fieldset v-if="selected=='Gender'" class="detail">
                 <h6>Detail</h6>
-                <div>
-                    <input id="male" type="checkbox" checked="true" @click="$emit('tickedBoxesTrigger')">
-                    <label for="male">Male</label>
-                </div>
-                <div>
-                    <input id="female" type="checkbox" checked="true" @click="$emit('tickedBoxesTrigger')">
-                    <label for="female">Female</label>
+                <div v-for="(item,i) in genderData" :key="item.label">
+                    <input :id="item.label" type="checkbox" :value="i" v-model="checkedGender">
+                    <label :for="item.label">{{item.label}}</label>
                 </div>
             </fieldset>
-            <fieldset class="detail hide" id="arrivalFields">
+            <fieldset v-if="selected=='Arrival Ports'" class="detail">
                 <h6>Detail</h6>
-                <div>
-                    <input id="sydney" type="checkbox" checked="true" @click="$emit('tickedBoxesTrigger')">
-                    <label for="sydney">Sydney</label>
-                </div>
-                <div>
-                    <input id="hobart" type="checkbox" checked="true" @click="$emit('tickedBoxesTrigger')">
-                    <label for="hobart">Hobart</label>
-                </div>
-                <div>
-                    <input id="norfolk" type="checkbox" checked="true" @click="$emit('tickedBoxesTrigger')">
-                    <label for="norfolk">Norfolk Island</label>
-                </div>
-                <div>
-                    <input id="port" type="checkbox" checked="true" @click="$emit('tickedBoxesTrigger')">
-                    <label for="port">Port Phillip</label>
-                </div>
-                <div>
-                    <input id="moreton" type="checkbox" checked="true" @click="$emit('tickedBoxesTrigger')">
-                    <label for="moreton">Moreton Bay</label>
-                </div>
-                <div>
-                    <input id="swan" type="checkbox" checked="true" @click="$emit('tickedBoxesTrigger')">
-                    <label for="swan">Swan River</label>
+                <div v-for="(item,i) in arrivalData" :key="item.label">
+                    <input :id="item.label" type="checkbox" :value="i" v-model="checkedArrival">
+                    <label :for="item.label">{{item.label}}</label>
                 </div>
             </fieldset>
-            <fieldset class="detail hide" id="departureFields">
+            <fieldset v-if="selected=='Departure Ports'" class="detail">
                 <h6>Detail</h6>
-                <div>
-                    <input id="england" type="checkbox" checked="true" @click="$emit('tickedBoxesTrigger')">
-                    <label for="england">England</label>
-                </div>
-                <div>
-                    <input id="ireland" type="checkbox" checked="true" @click="$emit('tickedBoxesTrigger')">
-                    <label for="ireland">Ireland</label>
-                </div>
-                <div>
-                    <input id="overseas" type="checkbox" checked="true" @click="$emit('tickedBoxesTrigger')">
-                    <label for="overseas">Overseas Territories</label>
+                <div v-for="(item,i) in departureData" :key="item.label">
+                    <input :id="item.label" type="checkbox" :value="i" v-model="checkedDeparture">
+                    <label :for="item.label">{{item.label}}</label>
                 </div>
             </fieldset>
         </div>
     </div>
 </template>
+
+<script>
+/*eslint-disable */
+    export default {
+      name: "Control",
+      props:["genderData", "arrivalData", "departureData", "protesterData"],
+      components: {
+      },
+      data: function() {
+        return {
+          selected:null,
+          checkedGender:[],
+          checkedArrival:[],
+          checkedDeparture:[],
+          represented:"Absolute",
+          selectionBtns:[
+            {label:"Gender",checked:this.checkedGender},
+            {label:"Arrival Ports",checked:this.checkedArrival},
+            {label:"Departure Ports",checked:this.checkedDeparture},
+            {label:"Political Convicts"}
+          ],
+          representationBtns:[
+            {label:"Absolute",action:"loadAbsolute"},
+            {label:"Cummulative",action:"loadCummulative"},
+          ],
+          arrivalFields:[]
+        }
+      },
+      mounted: function() {
+        this.checkAll();
+        this.selected="Gender";
+      },
+      computed: {
+        currentChecked(){
+          switch(this.selected){
+            case "Gender":
+              return this.checkedGender;
+              break;
+            case "Arrival Ports":
+              return this.checkedArrival;
+              break;
+            case "Departure Ports":
+              return this.checkedDeparture;
+              break;
+            case "Political Convicts":
+              return ["Protesters", "Nonprotesters"];
+              break;
+          }
+        }
+      },
+      methods: {
+        checkAll() {
+          this.checkedArrival=[]
+          for(var item in this.arrivalData){
+            this.checkedArrival.push(item)
+          }
+          this.checkedDeparture=[]
+          for(var item in this.departureData){
+            this.checkedDeparture.push(item)
+          }
+          this.checkedGender=[]
+          for(var item in this.genderData){
+            this.checkedGender.push(item)
+          }
+        },
+        isSelected(item) {
+          if(item.label==this.selected){
+            return "active"
+          }else{
+            return ""
+          }
+        },
+        makeSelection(item) {
+            this.checkAll();
+            this.selected=item.label;
+        },
+        isRepresented(item) {
+          if(item.label==this.represented){
+            return "active"
+          }else{
+            return ""
+          }
+        },
+        chooseRepresentation(item) {
+            this.represented=item.label;
+            this.$emit('updateData',this.selected,this.currentChecked,this.represented)
+        }
+      },
+      watch:{
+        currentChecked() {
+          this.$emit('updateData', this.selected, this.currentChecked, this.represented)
+        }
+      },
+      destroyed: function() {
+      }
+    }
+</script>
+
+
 
 <style scoped>
     h6 {
