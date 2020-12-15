@@ -1,0 +1,119 @@
+{
+ "name": "Offences",
+ "children": [
+  {
+   "name": "Class I - Against the person",
+   "children": [
+    {"name": "Infanticide","value":11},
+    {"name": "Abortion and attempts to procure","value":1},
+    {"name": "Bigamy","value":8},
+    {"name": "Suicide, attempted","value":5},
+    {"name": "Assault, aggravated","value":39},
+    {"name": "Assault, common","value":621},
+    {"name": "Other offences against the person","value":191},
+    {"name": "Concealment of birth","value":33},
+    {"name": "Murder","value":14},
+    {"name": "Attempted murder","value":17},
+    {"name": "Manslaughter","value":6},
+    {"name": "Rape","value":1}
+   ]
+  },
+  {
+   "name": "Class II - Against property",
+   "children": [
+    {"name":"Burglary","value":33},
+    {"name":"Housebreaking","value":26},
+    {"name":"Robbery and stealing from the person","value":151},
+    {"name":"Cattle-stealing","value":3},
+    {"name":"Sheep-stealing","value":8},
+    {"name":"Embezzlement and stealing by servants","value":158},
+    {"name":"Larceny, other","value":2462},
+    {"name":"Receiving","value":225},
+    {"name":"Fraud and false pretences","value":106},
+    {"name":"Arson","value":39},
+    {"name":"Malicious damage","value":137},
+    {"name":"Other offences against property","value":170}
+   ]
+  },
+  {
+   "name": "Class III - Against currency",
+   "children": [
+    {"name":"Forgery and uttering forged instruments","value":84}
+   ]
+  },
+  {
+   "name": "Class IV - Against good order",
+   "children": [
+    {"name":"Drunkenness","value":13279},
+    {"name":"Drunkenness and disorderly conduct","value":2170},
+    {"name":"Drunkenness, habitual","value":314},
+    {"name":"Obscene, threatening, or abusive language","value":1358},
+    {"name":"Vagrancy","value":702},
+    {"name":"Begging","value":7},
+    {"name":"Indecent, riotous, or offensive conduct","value":513},
+    {"name":"Other offences against good order","value":1095}
+   ]
+  },
+  {
+   "name": "Class V - Breach of convict regulations",
+   "children": [
+    {"name":"Conspiracy","value":4},
+    {"name":"Perjury and subornation","value":57},
+    {"name":"Offences against gambling suppression laws","value":3},
+    {"name":"Offences against liquor laws","value":15},
+    {"name":"Offences against masters and servants laws","value":4},
+    {"name":"Offences against neglected children laws","value":14},
+    {"name":"Desertion of wives and children","value":5},
+    {"name":"Offences against Revenue laws","value":1},
+    {"name":"Other offences, which included offences against convict discipline:","value":1},
+        {"name":"Bushranging","value":1},
+        {"name":"Making false statement/ representation","value":219},
+        {"name":"Absconding (non military)","value":5004},
+        {"name":"Trafficking and related","value":114},
+        {"name":"Absence without leave (non military)","value":13746},
+        {"name":"Marrying without permission","value":12},
+        {"name":"Insolence (non military)","value":2992},
+        {"name":"Abuse of child under their care","value":90},
+        {"name":"Insubordination (non military)","value":390},
+        {"name":"Sexual impropriety","value":1034},
+        {"name":"Idleness","value":123},
+        {"name":"Delivering child (legitimacy not known)","value":30},
+        {"name":"Neglect of work","value":1246},
+        {"name":"Possession of un-authorised item/s","value":371},
+        {"name":"Refusing to work","value":649},
+        {"name":"Harbouring individuals","value":115},
+        {"name":"Refusing to remain in or return to service","value":171},
+        {"name":"Adultery","value":115},
+        {"name":"Misrepresenting qualifications","value":31},
+        {"name":"Feigning sickness","value":57},
+        {"name":"Absence from authorised abode/ residence","value":808},
+        {"name":"Not being under proper control","value":157},
+        {"name":"Out after hours","value":3885},
+        {"name":"Failure to report herself","value":79},
+        {"name":"Loitering about during divine service","value":30},
+        {"name":"Being on a premises without authority (unspecified)","value":97},
+        {"name":"Prostitution and related","value":671},
+        {"name":"Felony (unspecified)","value":195},
+        {"name":"Falsely stating civil condition","value":106},
+        {"name":"Disorderly conduct (unspecified)","value":1549},
+        {"name":"Being in a public-house","value":718},
+        {"name":"Being in town contrary to orders","value":58},
+        {"name":"Attempting to leave the colony","value":29},
+        {"name":"Overstaying her pass","value":108},
+        {"name":"Disobedience (non-military)","value":2123},
+        {"name":"Absence from muster","value":97},
+        {"name":"Escaping from custody","value":155},
+        {"name":"Misconduct (non military)","value":3475},
+        {"name":"Admitting unauthorised person/s into employers premises","value":120},
+        {"name":"Being unfit/ useless for service","value":195},
+        {"name":"Delivering of an illegitimate child","value":317},
+        {"name":"Breach of miscellaneous Regulations/ Acts","value":36},
+        {"name":"Being found without a pass","value":248},
+        {"name":"Not proceeding according to pass","value":662}
+
+   ]
+  }
+ ]
+}
+
+
