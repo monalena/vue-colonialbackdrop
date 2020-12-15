@@ -314,6 +314,7 @@
         }
 
         this.convictData = data;
+        // console.log(data);
 
 
         this.updateData("Gender",["Male","Female"],"Absolute")
